@@ -175,7 +175,7 @@ class Speed(BaseFuzzy):
         elif temperature == 'HOT' and pressure == 'VERY HIGH':
             return self.slow
 
-    def graph(self):
+    def graph(self, temperature, pressure):
         x = np.linspace(-10, 110, 1000)
         slow_membership = np.array([self.slow[0], self.slow[0], self.slow[1], self.slow[2]])
         steady_membership = np.array([self.steady[0], self.steady[1], self.steady[2], self.steady[3]])
@@ -189,9 +189,10 @@ class Speed(BaseFuzzy):
         plt.plot(x, slow_values, label='Slow')
         plt.plot(x, steady_values, label='Steady')
         plt.plot(x, fast_values, label='Fast')
-        plt.title('Speed Output')
+        plt.title('Speed Output for Temperature: ' + temperature + ' and Pressure: ' + pressure)
         plt.legend()
         plt.show()
+        
     def membership_function(self, membership, x):
         if x <= membership[0] or x >= membership[-1]:
             return 0
@@ -203,8 +204,10 @@ class Speed(BaseFuzzy):
             return (membership[3] - x) / (membership[3] - membership[2])
         else:
             return 0
+
 speed = Speed()
-temperature = 'HOT'
-pressure = 'VERY LOW'
-speed_values = speed.calculate_speed(temperature, pressure)
-speed.graph()
+temperature = input("Enter temperature: ")
+pressure = input("Enter pressure: ")
+
+speed_values = speed.calculate_speed(temperature.upper(), pressure.upper())
+speed.graph(temperature.upper(), pressure.upper())
